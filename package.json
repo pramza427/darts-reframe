@@ -1,0 +1,19 @@
+{
+	"name": "darts-reframe",
+	"scripts": {
+		"tailwind": "npx tailwindcss -i ./resources/public/css/tailwind-input.css -o ./resources/public/css/style.css --watch",
+		"shadow": "npx shadow-cljs watch app browser-test karma-test",
+		"ancient": "clojure -Sdeps '{:deps {com.github.liquidz/antq {:mvn/version \"RELEASE\"}}}' -m antq.core",
+		"release": "npx shadow-cljs release app",
+		"build-report": "npx shadow-cljs run shadow.cljs.build-report app target/build-report.html"
+	},
+	"dependencies": {
+		"highlight.js": "11.5.1",
+		"react": "17.0.2",
+		"react-dom": "17.0.2"
+	},
+	"devDependencies": {
+		"shadow-cljs": "2.20.5",
+		"tailwindcss": "^3.3.1"
+	}
+}

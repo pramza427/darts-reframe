@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .cricket-btn {
+    @apply bg-white border border-black rounded px-2 py-6 m-1
+    }
+
+    .flex-center {
+    @apply flex justify-center items-center
+    }
+
+    .debug {
+    @apply  !border !border-red-500
+    }
+
+    .w-1_2 {
+    @apply w-1/2
+    }
+
+    .h-1_2 {
+    @apply h-1/2
+    }
+}
