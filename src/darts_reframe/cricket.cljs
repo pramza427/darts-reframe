@@ -128,7 +128,7 @@
       [:div.absolute.flex.justify-center.items-center.bg-opacity-80.bg-gray-500.w-full
        {:style {:height  "95%"
                 :z-index 100}}
-       [:div.flex.flex-col.items-center.bg-white.w-1_2.h-1_2.p-4.rounded-lg.text-4xl
+       [:div.flex.flex-col.items-center.bg-gray-200.w-1_2.h-1_2.p-4.rounded-lg.text-4xl.dark:bg-gray-900
         [:div.font-semibold "The Winner is:"]
         [:div.font-bold
          (cond
@@ -144,14 +144,14 @@
          [:div player-2-name] [:div.text-right player-2-score]]
         [:div.flex.flex-grow]
         [:div.flex.w-1_2.justify-center.items-end
-         [:button.p-4.border.border-gray-400.rounded.hover:bg-blue-200
+         [:button.p-4.border.border-gray-400.rounded.hover:bg-blue-100.dark:border-gray-800.dark:hover:bg-gray-800
           {:on-click #(rf/dispatch [::reset-game])}
           "Restart"]]]])))
 
 (defn total-line []
   [:<>
    [:div#score1.flex-center.text-4xl
-    {:class (when @(rf/subscribe [::added-score :player-2]) "animate-bounce-once")}
+    {:class (when @(rf/subscribe [::added-score :player-1]) "animate-bounce-once")}
     @(rf/subscribe [::total-score :player-1])]
    [:div.flex-center.text-4xl.col-span-2.h-20 "Total"]
    [:div#score2.flex-center.text-4xl
@@ -163,9 +163,9 @@
         player-2-score @(rf/subscribe [::player-score :player-2 score])]
     [:<>
      [:div.flex.w-full.justify-end
-      [:div.flex-center.w-full.h-20.rounded.hover:bg-blue-300.cursor-pointer.border.border-gray-300
+      [:div.flex-center.w-full.h-20.rounded.hover:bg-blue-100.cursor-pointer.border.border-gray-300.dark:hover:bg-gray-800.dark:border-gray-800
        {:on-click #(rf/dispatch [::add-player-score :player-1 score 1])}
-       (when (>= 0 player-1-score) [:div.absolute.text-3xl.text-opacity-20.text-black.select-none "+1"])
+       (when (>= 0 player-1-score) [:div.absolute.text-3xl.text-opacity-20.text-black.dark:text-gray-300.dark:text-opacity-20.select-none "+1"])
        (when (>= player-1-score 1) [:i.absolute.fa.fa-slash])
        (when (>= player-1-score 2) [:i.absolute.fa.fa-slash.fa-flip-horizontal])
        (when (>= player-1-score 3) [:i.absolute.far.fa-circle])]]
@@ -180,9 +180,9 @@
                 ;else
                 "")}
       (if (= score 25) "Bullseye" score)]
-     [:div.flex-center.w-full.h-20.rounded.hover:bg-blue-300.cursor-pointer.border.border-gray-300
+     [:div.flex-center.w-full.h-20.rounded.hover:bg-blue-100.cursor-pointer.border.border-gray-300.dark:hover:bg-gray-800.dark:border-gray-800
       {:on-click #(rf/dispatch [::add-player-score :player-2 score 1])}
-      (when (>= 0 player-2-score) [:div.absolute.text-3xl.text-opacity-20.text-black.select-none "+1"])
+      (when (>= 0 player-2-score) [:div.absolute.text-3xl.text-opacity-20.text-black.dark:text-gray-300.dark:text-opacity-20.select-none "+1"])
       (when (>= player-2-score 1) [:i.absolute.fa.fa-slash])
       (when (>= player-2-score 2) [:i.absolute.fa.fa-slash.fa-flip-horizontal])
       (when (>= player-2-score 3) [:i.absolute.far.fa-circle])]]))
@@ -192,8 +192,9 @@
    [winner-screen]
    [:div.relative {:style {:max-width "60rem"}}
     [:div.text-center.font-semibold.text-4xl.p-4 "Cricket"]
-    [:div.absolute.top-3.right-2.flex-center.border.border-black.rounded-full.px-2.hover:bg-blue-200
-     [:button.pr-2 {:on-click #(rf/dispatch [::undo])} "Undo"]
+    [:div.absolute.top-3.right-2.flex-center.undo-btn
+     {:on-click #(rf/dispatch [::undo])}
+     [:div.pr-2 "Undo"]
      [:i.fa-solid.fa-rotate-left.fa-sm]]
     [:div.grid.gap-4.text-2xl {:style {:grid-template-columns "1fr 1fr 1fr 1fr"}}
      [:input.col-span-2.bg-transparent.text-center.border-b-2.border-red-500

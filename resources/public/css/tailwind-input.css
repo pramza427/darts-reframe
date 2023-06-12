@@ -7,6 +7,14 @@
     @apply bg-white border border-black rounded px-2 py-6 m-1
     }
 
+    .count-btn {
+    @apply w-20 h-20 m-2 text-2xl border border-gray-400 dark:border-gray-600 rounded hover:bg-blue-100 dark:hover:bg-gray-800
+    }
+
+    .undo-btn {
+    @apply border border-gray-400 rounded-full px-2 hover:cursor-pointer hover:bg-blue-200 dark:border-gray-600 dark:hover:bg-gray-700
+    }
+
     .flex-center {
     @apply flex justify-center items-center
     }
