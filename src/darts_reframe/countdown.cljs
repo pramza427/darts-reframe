@@ -208,8 +208,7 @@
         current-player (:current-player game-state)
         current-team (+ 1 (mod (- current-player 1) team-count))
         teams (:teams game-state)
-        temp-score (:temp-score game-state)
-        winners @(rf/subscribe [::winners])]
+        temp-score (:temp-score game-state)]
     [:div
      [winner-screen]
      [:div.flex.justify-center.w-full.overflow-auto
