@@ -4,6 +4,7 @@
 		"tailwind": "npx tailwindcss -i ./resources/public/css/tailwind-input.css -o ./resources/public/css/style.css --watch",
 		"shadow": "npx shadow-cljs watch app browser-test karma-test",
 		"ancient": "clojure -Sdeps '{:deps {com.github.liquidz/antq {:mvn/version \"RELEASE\"}}}' -m antq.core",
+		"compile": "shadow-cljs compile app",
 		"release": "npx shadow-cljs release app",
 		"build-report": "npx shadow-cljs run shadow.cljs.build-report app target/build-report.html"
 	},
