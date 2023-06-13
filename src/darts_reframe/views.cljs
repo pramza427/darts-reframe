@@ -3,7 +3,8 @@
     [re-frame.core :as rf]
     [darts-reframe.subs :as subs]
     [darts-reframe.cricket :refer [cricket]]
-    [darts-reframe.countdown :refer [countdown]]))
+    [darts-reframe.countdown :refer [countdown]]
+    [darts-reframe.ticktackdarts :refer [ticktackdarts]]))
 
 ;; ---------- Subscriptions ----------
 (rf/reg-sub
@@ -22,8 +23,11 @@
       :501
       (-> {}
           (assoc :current-view view)
-          (assoc :temp-options {:players 2 :teams 2 :score 501})))
-    ))
+          (assoc :temp-options {:players 2 :teams 2 :score 501}))
+
+      :ticktackdarts
+      (assoc {} :current-view view)
+      )))
 
 ;; ---------- Views ----------
 (defn top-bar []
@@ -34,6 +38,9 @@
    [:button.p-1.px-2.my-1.border-r.border-gray-500.hover:bg-gray-600
     {:on-click #(rf/dispatch [::set-current-view :501])}
     "501"]
+   [:button.p-1.px-2.my-1.border-r.border-gray-500.hover:bg-gray-600
+    {:on-click #(rf/dispatch [::set-current-view :ticktackdarts])}
+    "Tick Tack Darts"]
    [:div.flex.flex-grow]
    [:button.py-1.px-2.m-1.hover:bg-gray-600
     {:on-click (fn [] (.classList.toggle (js/document.getElementById "top-elem") "dark"))}
@@ -48,6 +55,6 @@
      (case current-view
        :cricket [cricket]
        :501 [countdown]
-       :xox []
+       :ticktackdarts [ticktackdarts]
        [countdown])]))
 
