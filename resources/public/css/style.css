@@ -612,6 +612,10 @@ video {
   position: relative;
 }
 
+.sticky {
+  position: sticky;
+}
+
 .left-0 {
   left: 0px;
 }
@@ -626,6 +630,10 @@ video {
 
 .top-3 {
   top: 0.75rem;
+}
+
+.top-0 {
+  top: 0px;
 }
 
 .col-span-2 {
@@ -743,6 +751,10 @@ video {
 
 .overflow-auto {
   overflow: auto;
+}
+
+.overflow-hidden {
+  overflow: hidden;
 }
 
 .rounded {
@@ -912,8 +924,8 @@ video {
   padding-bottom: 1.25rem;
 }
 
-.pb-8 {
-  padding-bottom: 2rem;
+.pb-6 {
+  padding-bottom: 1.5rem;
 }
 
 .pr-2 {
@@ -922,10 +934,6 @@ video {
 
 .pt-10 {
   padding-top: 2.5rem;
-}
-
-.pb-6 {
-  padding-bottom: 1.5rem;
 }
 
 .text-center {

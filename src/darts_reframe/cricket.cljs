@@ -1,6 +1,7 @@
 (ns darts-reframe.cricket
   (:require [clojure.string :as str]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            ["canvas-confetti" :as confetti]))
 
 (def NUMBERS [15 16 17 18 19 20 25])
 (def EXTRA-NUMBERS [11 12 13 14 15 16 17 18 19 20 25])
@@ -19,11 +20,6 @@
   ::player-score
   (fn [db [_ player score]]
     (get-in db [:game-state player :score score])))
-
-(rf/reg-sub
-  ::added-score
-  (fn [db [_ player]]
-    (get-in db [:game-state player :added-score])))
 
 (rf/reg-sub
   ::end-game?
@@ -75,11 +71,6 @@
     (assoc-in db [:game-state :player-2 :name] val)))
 
 (rf/reg-event-db
-  ::set-added-score
-  (fn [db [_ player val]]
-    (assoc-in db [:game-state player :added-score] val)))
-
-(rf/reg-event-db
   ::cap-name
   (fn [db [_ player]]
     (let [name (get-in db [:game-state player :name])]
@@ -94,21 +85,32 @@
       (cond
         (and (<= 3 score-1) (<= 3 score-2)) db
         (and (= player :player-1) (<= 3 score-2)) {:db (-> db
-                                                       (update :old-states (fn [e] (take 20 (conj e (get db :game-state)))))
-                                                       (assoc-in [:game-state player :score score] (min 3 (+ current-amount 1))))}
+                                                           (update :old-states (fn [e] (take 20 (conj e (get db :game-state)))))
+                                                           (assoc-in [:game-state player :score score] (min 3 (+ current-amount 1))))}
         (and (= player :player-2) (<= 3 score-1)) {:db (-> db
-                                                       (update :old-states (fn [e] (take 20 (conj e (get db :game-state)))))
-                                                       (assoc-in [:game-state player :score score] (min 3 (+ current-amount 1))))}
+                                                           (update :old-states (fn [e] (take 20 (conj e (get db :game-state)))))
+                                                           (assoc-in [:game-state player :score score] (min 3 (+ current-amount 1))))}
         :else {:db (-> db
-                   (update :old-states (fn [e] (take 20 (conj e (get db :game-state)))))
-                   (assoc-in [:game-state player :score score] (+ current-amount 1))
-                   (assoc-in [:game-state player :added-score] true)
-                   (assoc-in [:game-state player :added-score] true))
-               :dispatch-later {:ms 300 :dispatch [::set-added-score player false]}}))))
+                       (update :old-states (fn [e] (take 20 (conj e (get db :game-state)))))
+                       (assoc-in [:game-state player :score score] (+ current-amount 1)))}))))
+
+(rf/reg-event-fx
+  ::score-btn-click
+  (fn [{:keys [db]} [_ player score]]
+    (let [closed? (<= 3 (get-in db [:game-state player :score score]))]
+      (cond
+        closed?
+        {:db db}
+        (let [elem-id (if (= player :player-1) "score1" "score2")
+              score-elem-rect (.getBoundingClientRect (js/document.getElementById elem-id))]
+          (confetti (clj->js {:origin        {:x (/ (+ (.-left score-elem-rect) (/ (.-width score-elem-rect) 2)) (.-innerWidth js/window))
+                                              :y (/ (.-top score-elem-rect) (.-innerHeight js/window))}
+                              :particleCount 50 :gravity 1})))
+        {:dispatch [::add-player-score player score]}))))
 
 (rf/reg-event-db
   ::reset-game
-  (fn [db [ one two three]]
+  (fn [db [one two three]]
     (js/console.log db one two three)
     (-> db
         (dissoc :old-states)
@@ -151,11 +153,9 @@
 (defn total-line []
   [:<>
    [:div#score1.flex-center.text-4xl
-    {:class (when @(rf/subscribe [::added-score :player-1]) "animate-bounce-once")}
     @(rf/subscribe [::total-score :player-1])]
    [:div.flex-center.text-4xl.col-span-2.h-20 "Total"]
    [:div#score2.flex-center.text-4xl
-    {:class (when @(rf/subscribe [::added-score :player-2]) "animate-bounce-once")}
     @(rf/subscribe [::total-score :player-2])]])
 
 (defn grid-column [score]
@@ -164,7 +164,7 @@
     [:<>
      [:div.flex.w-full.justify-end
       [:div.flex-center.w-full.h-20.rounded.hover:bg-blue-100.cursor-pointer.border.border-gray-300.dark:hover:bg-gray-800.dark:border-gray-800
-       {:on-click #(rf/dispatch [::add-player-score :player-1 score 1])}
+       {:on-click #(rf/dispatch [::score-btn-click :player-1 score])}
        (when (>= 0 player-1-score) [:div.absolute.text-3xl.text-opacity-20.text-black.dark:text-gray-300.dark:text-opacity-20.select-none "+1"])
        (when (>= player-1-score 1) [:i.absolute.fa.fa-slash])
        (when (>= player-1-score 2) [:i.absolute.fa.fa-slash.fa-flip-horizontal])
@@ -181,18 +181,18 @@
                 "")}
       (if (= score 25) "Bullseye" score)]
      [:div.flex-center.w-full.h-20.rounded.hover:bg-blue-100.cursor-pointer.border.border-gray-300.dark:hover:bg-gray-800.dark:border-gray-800
-      {:on-click #(rf/dispatch [::add-player-score :player-2 score 1])}
+      {:on-click #(rf/dispatch [::score-btn-click :player-2 score])}
       (when (>= 0 player-2-score) [:div.absolute.text-3xl.text-opacity-20.text-black.dark:text-gray-300.dark:text-opacity-20.select-none "+1"])
       (when (>= player-2-score 1) [:i.absolute.fa.fa-slash])
       (when (>= player-2-score 2) [:i.absolute.fa.fa-slash.fa-flip-horizontal])
       (when (>= player-2-score 3) [:i.absolute.far.fa-circle])]]))
 
 (defn cricket []
-  [:div.flex.justify-center.w-full.overflow-auto
+  [:div.flex.justify-center.w-full
    [winner-screen]
    [:div.relative {:style {:max-width "60rem"}}
     [:div.text-center.font-semibold.text-4xl.p-4 "Cricket"]
-    [:div.absolute.top-3.right-2.flex-center.undo-btn
+    [:div.absolute.top-3.right-2.flex-center.undo-btn.no-select
      {:on-click #(rf/dispatch [::undo])}
      [:div.pr-2 "Undo"]
      [:i.fa-solid.fa-rotate-left.fa-sm]]
