@@ -10,14 +10,12 @@
 	},
 	"dependencies": {
 		"canvas-confetti": "^1.6.0",
-		"create-react-class": "^15.7.0",
 		"highlight.js": "11.5.1",
-		"react": "^17.0.2",
-		"react-dom": "^17.0.2"
+		"react": "12.1.2",
+		"react-dom": "12.1.2"
 	},
 	"devDependencies": {
 		"shadow-cljs": "2.20.5",
-		"tailwindcss": "^3.3.1",
-		"react-dom": "^17.0.2"
+		"tailwindcss": "^3.3.1"
 	}
 }
