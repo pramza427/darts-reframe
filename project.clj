@@ -9,7 +9,7 @@
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [org.clojure/clojurescript "1.10.773"]
                  [org.clojure/core.async  "0.4.500"]
-                 [org.webjars.npm/react-dom "17.0.2"]
+                 [org.webjars.npm/react-dom "17.0.2" :exclusions [org.webjars.npm/js-tokens]]
                  [re-frame "1.3.0"]
                  [reagent "1.1.1"]
                  [day8.re-frame/tracing "0.6.2"]
