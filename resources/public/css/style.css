@@ -588,32 +588,12 @@ video {
   height: 50%;
 }
 
-@keyframes bounce-once {
-  0%, 100% {
-    transform: none;
-    animation-timing-function: cubic-bezier(0,0,0.2,1);
-  }
-
-  50% {
-    transform: translateY(-10%);
-    animation-timing-function: cubic-bezier(0.8,0,1,1);
-  }
-}
-
-.animate-bounce-once {
-  animation: bounce-once 0.3s 1;
-}
-
 .absolute {
   position: absolute;
 }
 
 .relative {
   position: relative;
-}
-
-.sticky {
-  position: sticky;
 }
 
 .left-0 {
@@ -630,10 +610,6 @@ video {
 
 .top-3 {
   top: 0.75rem;
-}
-
-.top-0 {
-  top: 0px;
 }
 
 .col-span-2 {

@@ -97,16 +97,19 @@
 (rf/reg-event-fx
   ::score-btn-click
   (fn [{:keys [db]} [_ player score]]
-    (let [closed? (<= 3 (get-in db [:game-state player :score score]))]
+    (let [not-opened? (> 3 (get-in db [:game-state player :score score]))
+          score-closed (and (<= 3 (get-in db [:game-state :player-2 :score score]))
+                            (<= 3 (get-in db [:game-state :player-1 :score score])))]
       (cond
-        closed?
-        {:db db}
+        (or score-closed not-opened?)
+        {:dispatch [::add-player-score player score]}
+        :else
         (let [elem-id (if (= player :player-1) "score1" "score2")
               score-elem-rect (.getBoundingClientRect (js/document.getElementById elem-id))]
           (confetti (clj->js {:origin        {:x (/ (+ (.-left score-elem-rect) (/ (.-width score-elem-rect) 2)) (.-innerWidth js/window))
                                               :y (/ (.-top score-elem-rect) (.-innerHeight js/window))}
-                              :particleCount 50 :gravity 1})))
-        {:dispatch [::add-player-score player score]}))))
+                              :particleCount 50 :gravity 1}))
+          {:dispatch [::add-player-score player score]})))))
 
 (rf/reg-event-db
   ::reset-game

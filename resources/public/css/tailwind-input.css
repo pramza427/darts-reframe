@@ -30,19 +30,4 @@
     .h-1_2 {
     @apply h-1/2
     }
-
-    @keyframes bounce-once {
-      0%, 100% {
-        transform: none;
-        animation-timing-function: cubic-bezier(0,0,0.2,1);
-      }
-      50% {
-        transform: translateY(-10%);
-        animation-timing-function: cubic-bezier(0.8,0,1,1);
-      }
-    }
-
-    .animate-bounce-once {
-      animation: bounce-once 0.3s 1;
-    }
 }
