@@ -11,7 +11,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: compile app
-      run: npm run compile
+    - name: Install dependencies
+      run: lein deps
     - name: run prod
       run: npm run release
