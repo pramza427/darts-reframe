@@ -11,8 +11,8 @@
 	"dependencies": {
 		"canvas-confetti": "^1.6.0",
 		"highlight.js": "11.5.1",
-		"react": "12.1.2",
-		"react-dom": "12.1.2"
+		"react": "^17.0.2",
+		"react-dom": "17.0.2"
 	},
 	"devDependencies": {
 		"shadow-cljs": "2.20.5",
