@@ -11,5 +11,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: compile app
+      run: npm compile
     - name: run prod
       run: npm run release
